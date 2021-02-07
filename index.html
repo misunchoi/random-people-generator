@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Random People Generator</title>
+
+    <!-- Make page responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: sans-serif;
+      }
+
+      .buttonWrapper {
+        display: flex;
+      }
+
+      button {
+        width: 100px;
+        height: 40px;
+        margin: 1em;
+        font-size: 1em;
+        color: white;
+        background: black;
+        border: none;
+        border-radius: 5px;
+      }
+
+      #people {
+        max-width: 650px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .personDiv {
+        width: 150px;
+        padding: 1em;
+        margin: 1em;
+        text-align: center;
+        overflow-wrap: break-word;
+        border: 1px solid black;
+        border-radius: 5px;
+      }
+    </style>
+
+    <script>
+      function addDivElement(parentEl, data) {
+        const divEl = document.createElement("div");
+        divEl.innerHTML = data;
+        parentEl.appendChild(divEl);
+      }
+
+      function addImgElement(parentEl, imgUrl) {
+        const imgEl = document.createElement("img");
+        imgEl.src = imgUrl;
+        parentEl.appendChild(imgEl);
+      }
+
+      function formatPersonData(data) {
+        // Create div element to contain each person's data
+        var person = document.createElement("div");
+        person.classList.add("personDiv");
+
+        // Add image, name, and email to the person div element
+        data.picture && addImgElement(person, data.picture.thumbnail);
+        data.name &&
+          addDivElement(person, `${data.name.first} ${data.name.last}`);
+				addDivElement(person, data.email);
+				
+				return person;
+      }
+
+      function getPersonInfo(gender) {
+        // Reset list on each click
+        document.getElementById("people").innerHTML = "";
+
+        // Get list of 9 people on each click, based on gender
+        fetch(`https://randomuser.me/api/?results=9&gender=${gender}`)
+          .then((response) => response.json())
+          .then((output) => {
+            output &&
+              output.results.forEach((data) => {
+								// Format response data
+								const person = formatPersonData(data);
+								
+                // Display the formatted data to the people div
+                document.getElementById("people").appendChild(person);
+              });
+          })
+          .catch((error) => console.error(error));
+      }
+    </script>
+  </head>
+  <body>
+    <h2>
+      Click either of the buttons below to get information of 9 people with the
+      respective gender.
+    </h2>
+    <div class="buttonWrapper">
+      <button type="button" onclick="getPersonInfo('male')">Male</button>
+      <button type="button" onclick="getPersonInfo('female')">Female</button>
+    </div>
+
+    <div id="people"></div>
+  </body>
+</html>
