@@ -1,7 +1,7 @@
 {
   "name": "random-people-generator",
   "version": "1.0.0",
-  "description": "AAC Coding Challenge - Random People Generator",
+  "description": "Random People Generator",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
